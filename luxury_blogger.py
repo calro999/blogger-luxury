@@ -91,10 +91,7 @@ def generate_article_with_llm(item):
             img_obj = small_images[0]
             image_url = img_obj.get("imageUrl", "") if isinstance(img_obj, dict) else img_obj
 
-    if image_url:
-        image_url = re.sub(r'\?_ex=\d+x\d+', '?_ex=500x500', image_url)
-
-    prompt = f"""以下の楽天の商品情報を基にして、自動投稿用のHTML記事を生成してください。
+    if image_url:    prompt = f"""以下の楽天の商品情報を基にして、自動投稿用のHTML記事を生成してください。
 【商品名】: {title}
 【価格】: {price}円
 【商品画像URL】: {image_url}
@@ -103,17 +100,17 @@ def generate_article_with_llm(item):
 以下の要件を厳格に遵守してください：
 1. 出力はブログの本文となるHTMLコードのみとし、余計な説明、挨拶、前置きや後書き（例：「以下が記事です」「```html」のようなマークダウンブロック）は絶対に含めず、純粋なHTML文字列のみを出力してください。
 2. 日本語のみで出力してください。
-3. アイキャッチ画像として、商品画像URL（{image_url}）を直接<img>タグ of src属性に指定し、記事の最上部に配置してください。
+3. 画像サイズが小さくても美しく額縁のようにおしゃれに見せるため、アイキャッチ画像として、商品画像URL（{image_url}）を直接<img>タグに指定し、必ず `<div class="premium-image-wrapper">` と `</div>` で囲んで最上部に配置してください。
 4. 記事構成：
-   - キャッチーで見出しとしてふさわしい上品なタイトル（<h2> または <h3> タグを使用）
-   - 商品の魅力的な説明：
+   - 記事全体を `<div class="premium-squishy-article">` と `</div>` で囲んでください。
+   - タイトル（<h2> または <h3> タグを使用）
+   - 商品の魅力的な説明（`<div class="premium-content-body">` と `</div>` で囲むこと）：
      * コンセプト「贅沢スクイーズLife 〜SNSで話題の高級インポート＆レア触感カタログ〜」に完全に合致した内容にしてください。
      * 特に「Mellojoy」のスクイーズやレア感の高い高級スクイーズにフォーカスし、その極上の触感（もちもち、ふわふわ、低反発など）、SNSでの話題性、インポート品ならではの贅沢感と所有欲を満たす上品でプレミアムな魅力を伝える日本語の紹介文にしてください。
-     * 客観的にその商品のデザインの美しさや品質の高さ、レア度を語り、過度な自分語りやポエム調の表現は避けてください。
-     * 毎回完全に独立したユニークな内容とし、他の記事と似たような言い回しやテンプレート的な文章構成の使い回しは絶対に禁止します。商品の個別の特徴（デザイン、触感のこだわり、パッケージ、香りなど）に焦点を当てて執筆してください。
-   - 極上の贅沢ポイント3選（必ず <ul> と <li> タグを使用。なぜこのスクイーズが「極上」で「贅沢」なのか、触感やデザイン、レア度の観点から明確に伝えてください）
+     * 毎回完全に独立したユニークな内容とし、他の記事と似たような言い回しやテンプレート的な文章構成の使い回しは絶対に禁止します。
+   - 極上の贅沢ポイント3選（必ず `<ul class="premium-points-list">` と `<li>` タグを使用。なぜこのスクイーズが「極上」で「贅沢」なのかを明確に伝えてください）
    - 購買意欲を促すプレミアムな太字の誘導文（<strong> または <b> タグを使用）
-   - 最後にアフィリエイトリンクのボタン（<a>タグでスタイルし、新しいタブで開く target="_blank" rel="noopener noreferrer" を指定。ゴールドやシャンパンゴールド、ブロンズなどの上品で洗練された高級感のあるグラデーションとシャドウを施したボタンにしてください。例：background: linear-gradient(135deg, #d4af37 0%, #f9e8a2 100%); color: #4a3c00; padding: 12px 24px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); border: 1px solid rgba(255, 255, 255, 0.4);）
+   - 最後にアフィリエイトリンクのボタンとして、必ずクラス名 `premium-affiliate-btn` を付与した <a>タグを配置してください。（例：`<a class="premium-affiliate-btn" href="{url}" target="_blank" rel="noopener noreferrer">プレミアム詳細を見る ＞</a>`）
 """
 
     system_prompt = "あなたは高級スクイーズ専門のコレクター兼紹介ブロガーです。SNSで話題の高級インポートスクイーズや、『Mellojoy』などの大人気・レア触感スクイーズを厳選して紹介します。触感フェチや大人のコレクター層に向けて、上品で洗練された、かつ商品の魅力がダイレクトに伝わる記事を日本語のみで執筆してください。毎回完全にユニークで、テンプレートの使い回し感のない文章を作成してください。指示された仕様に完全に従い、前置きやHTMLタグブロックのマークダウン表現などを含めない純粋なHTML本文のみを出力します。"
@@ -186,31 +183,35 @@ def generate_article_with_llm(item):
 
     # 最終フォールバック: LLMが全滅した場合のテンプレート記事生成
     print("WARNING: All LLM generation attempts failed. Generating article using local premium template.")
-    fallback_html = f"""<div class="premium-squishy-article" style="font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; line-height: 1.8;">
-    <img src="{image_url}" alt="{title}" style="max-width: 100%; height: auto; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 25px; display: block; margin-left: auto; margin-right: auto;" />
+    fallback_html = f"""<div class="premium-squishy-article">
+    <div class="premium-image-wrapper">
+        <img src="{image_url}" alt="{title}" />
+    </div>
     
-    <h2 style="font-size: 24px; color: #4a3c00; border-bottom: 2px solid #d4af37; padding-bottom: 10px; margin-bottom: 20px;">【プレミアム触感】{title}</h2>
+    <div class="premium-content-body">
+        <h2 style="font-size: 20px; color: #2c2302; margin-top: 10px; margin-bottom: 15px;">【極上レア触感】{title}</h2>
+        
+        <p>「贅沢スクイーズLife」がお届けする、極上のリラックスアイテム。SNSで大きな話題を呼んでいる「Mellojoy」シリーズの高級インポートスクイーズをご紹介します。</p>
+        
+        <p>手に吸い付くような独特のもちもち感と、時間をかけてゆっくりと戻る超低反発のプレミアムな触感。ただ可愛いだけでなく、見ているだけで心が満たされる高いデザイン性が、忙しい毎日に極上の癒やしと贅沢なひとときをもたらしてくれます。</p>
+        
+        <ul class="premium-points-list">
+            <li><strong>極上の低反発仕様：</strong> 何度も握りたくなる極上のレア触感で、大人のための上質な癒やしを提供します。</li>
+            <li><strong>洗練されたインポートデザイン：</strong> お部屋のインテリアとしても美しく映える、プレミアム感溢れる仕上がり。</li>
+            <li><strong>特別な香りと質感：</strong> 所有する喜びを満たしてくれる、こだわり抜かれた贅沢なクオリティ。</li>
+        </ul>
+        
+        <p style="font-size: 15px; margin-bottom: 25px;">特別な癒やしを演出するこちらのスクイーズは、現在 <strong>{price}円</strong> でお求めいただけます。</p>
+    </div>
     
-    <p>「贅沢スクイーズLife」がお届けする、極上のリラックスアイテム。SNSで大きな話題を呼んでいる「Mellojoy」シリーズの高級インポートスクイーズをご紹介します。</p>
-    
-    <p>手に吸い付くような独特のもちもち感と、時間をかけてゆっくりと戻る超低反発のプレミアムな触感。ただ可愛いだけでなく、見ているだけで心が満たされる高いデザイン性が、忙しい毎日に極上の癒やしと贅沢なひとときをもたらしてくれます。</p>
-    
-    <h3 style="font-size: 18px; color: #4a3c00; margin-top: 30px;">極上の贅沢ポイント3選</h3>
-    <ul style="padding-left: 20px; margin-bottom: 25px;">
-        <li style="margin-bottom: 10px;"><strong>極上の低反発仕様：</strong> 何度も握りたくなる極上のレア触感で、大人のための上質な癒やしを提供します。</li>
-        <li style="margin-bottom: 10px;"><strong>洗練されたインポートデザイン：</strong> お部屋のインテリアとしても美しく映える、プレミアム感溢れる仕上がり。</li>
-        <li style="margin-bottom: 10px;"><strong>特別な香りと質感：</strong> 所有する喜びを満たしてくれる、こだわり抜かれた贅沢なクオリティ。</li>
-    </ul>
-    
-    <p style="font-size: 16px; margin-bottom: 30px;">特別な癒やしを演出するこちらのスクイーズは、現在 <strong>{price}円</strong> でお求めいただけます。</p>
-    
-    <div style="text-align: center; margin-top: 35px; margin-bottom: 20px;">
-        <a href="{url}" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #d4af37 0%, #f9e8a2 100%); color: #4a3c00; padding: 14px 28px; text-decoration: none; border-radius: 30px; display: inline-block; font-weight: bold; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); border: 1px solid rgba(255, 255, 255, 0.4); transition: transform 0.2s ease;">
+    <div style="text-align: center; margin-top: 15px; margin-bottom: 10px;">
+        <a class="premium-affiliate-btn" href="{url}" target="_blank" rel="noopener noreferrer">
             プレミアム詳細を見る ＞
         </a>
     </div>
 </div>"""
     return fallback_html.strip()
+
 
 def post_to_blogger(title, content):
     creds = Credentials(
