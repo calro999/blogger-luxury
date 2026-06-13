@@ -3170,6 +3170,74 @@ body.feed-view .post {
   margin: 0 !important;
   font-size: 12px !important;
   color: #8c8273 !important;
+/* 画像アスペクト比保護＆正方形枠デザイン */
+.premium-image-wrapper, 
+.post-body a[imageanchor="1"],
+.heroPost .big-post-image-top-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 180px !important;
+  height: 180px !important;
+  padding: 8px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(212, 175, 55, 0.25) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 18px rgba(74, 60, 0, 0.05) !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+  margin: 0 auto !important;
+  overflow: hidden !important;
+  float: none !important;
+}
+
+.post-body img, 
+.post img, 
+.premium-image-wrapper img,
+.heroPost .big-post-image-top-container img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important; /* アスペクト比を維持したまま枠内に綺麗に収める */
+  border-radius: 8px !important;
+}
+
+/* サイドバーと自己紹介エリアを完全に非表示 */
+.sidebar-container, 
+#sidebar, 
+.widget.Profile, 
+.Profile,
+.attribution,
+.attribution-container {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* 1カラム中央配置（幅850px）で読みやすさ重視に */
+.main_content_container,
+.page,
+#main,
+.Blog {
+  max-width: 850px !important; /* 800px〜1000pxの間の850px */
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 16px !important;
+  float: none !important;
+}
+
+.post, .post-outer, .heroPost {
+  max-width: 850px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+#footer {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  text-align: center !important;
 }
 /* ======================================================= */
 ]]></b:skin>
