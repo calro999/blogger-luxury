@@ -3076,59 +3076,61 @@ body.feed-view .post {
     width: 100% !important;
     box-sizing: border-box !important;
   }
-/* 注目記事（ビッグポスト）の大幅見直し・スリム化 */
+/* 注目記事（ビッグポスト）を一般的な綺麗なタイトルボックス＆カードスタイルに刷新 */
 .heroPost {
   background: #ffffff !important;
-  border: 1px solid rgba(212, 175, 55, 0.18) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 10px 30px rgba(74, 60, 0, 0.04) !important;
-  margin-bottom: 35px !important;
-  padding: 24px !important;
+  border: 2px solid #d4af37 !important; /* 注目記事らしくゴールド枠 */
+  border-radius: 20px !important;
+  box-shadow: 0 15px 40px rgba(74, 60, 0, 0.06) !important;
+  margin: 0 auto 40px auto !important;
+  padding: 30px !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 20px !important;
-  max-width: 960px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  gap: 30px !important;
+  max-width: 1200px !important;
   box-sizing: border-box !important;
   float: none !important;
+  width: 100% !important;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .heroPost {
     flex-direction: row !important;
-    align-items: flex-start !important;
+    align-items: center !important;
   }
 }
 
-/* ビッグポスト画像コンテナを「小さい枠」に制限 */
+/* 注目記事の画像コンテナ：歪まず綺麗に収まる正方形枠 */
 .heroPost .big-post-image-top-container {
-  display: inline-block !important;
-  padding: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 220px !important; /* 通常記事より少し大きく */
+  height: 220px !important;
+  padding: 10px !important;
   background: #ffffff !important;
-  border: 1px solid rgba(212, 175, 55, 0.25) !important;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
   border-radius: 12px !important;
-  box-shadow: 0 6px 18px rgba(74, 60, 0, 0.05) !important;
-  max-width: 200px !important;
-  width: 100% !important;
+  box-shadow: 0 8px 25px rgba(74, 60, 0, 0.06) !important;
   box-sizing: border-box !important;
-  text-align: center !important;
   flex-shrink: 0 !important;
+  margin: 0 auto !important;
+  overflow: hidden !important;
   float: none !important;
   height: auto !important;
-  margin: 0 auto !important;
 }
 
 .heroPost .big-post-image-top-container img {
-  max-width: 180px !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
   height: auto !important;
   object-fit: contain !important;
   border-radius: 8px !important;
-  width: 100% !important;
 }
 
-/* ビッグポストタイトル・テキストエリア */
+/* 注目記事のタイトル・テキストエリア */
 .heroPost .big-post-title {
   flex-grow: 1;
   width: 100% !important;
@@ -3137,43 +3139,53 @@ body.feed-view .post {
   background: transparent !important;
   color: #3d352c !important;
   float: none !important;
+  text-align: left !important;
 }
 
 .heroPost .big-post-title h3 {
-  margin: 0 0 10px 0 !important;
+  margin: 0 0 15px 0 !important;
 }
 
+/* タイトルを一般的な綺麗なタイトルボックス風に装飾 */
 .heroPost .big-post-title h3 a {
   font-family: 'Cinzel', 'Noto Sans JP', serif !important;
   color: #2c2302 !important;
-  font-size: 20px !important;
+  font-size: 22px !important;
   line-height: 1.4 !important;
   font-weight: 700 !important;
   text-decoration: none !important;
+  border-left: 4px solid #d4af37 !important; /* 左側にゴールドのアクセントバー */
+  padding-left: 16px !important;
+  display: block !important;
+  font-style: normal !important;
+  text-transform: none !important;
 }
 
 .heroPost .big-post-title h3 a:hover {
   color: #d4af37 !important;
 }
 
-/* ビッグポストのテキスト内 */
+/* 本文テキスト調整 */
 .heroPost .big-post-title .post-body,
 .heroPost .big-post-title .post-snippet {
-  font-size: 14.5px !important;
+  font-size: 15px !important;
   line-height: 1.8 !important;
   color: #5c5346 !important;
   margin: 0 0 15px 0 !important;
+  font-family: 'Noto Sans JP', sans-serif !important;
+  font-style: normal !important;
 }
 
-/* 著者や日付のバイライン */
 .heroPost .big-post-title .item-byline {
   margin: 0 !important;
   font-size: 12px !important;
   color: #8c8273 !important;
-/* 画像アスペクト比保護＆正方形枠デザイン */
+  font-style: normal !important;
+}
+
+/* 画像アスペクト比保護＆通常記事の正方形枠デザイン */
 .premium-image-wrapper, 
-.post-body a[imageanchor="1"],
-.heroPost .big-post-image-top-container {
+.post-body a[imageanchor="1"] {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -3193,8 +3205,7 @@ body.feed-view .post {
 
 .post-body img, 
 .post img, 
-.premium-image-wrapper img,
-.heroPost .big-post-image-top-container img {
+.premium-image-wrapper img {
   max-width: 100% !important;
   max-height: 100% !important;
   width: auto !important;
@@ -3215,20 +3226,20 @@ body.feed-view .post {
   height: 0 !important;
 }
 
-/* 1カラム中央配置（幅850px）で読みやすさ重視に */
+/* 1カラム中央配置（幅1200px）で読みやすさ重視に */
 .main_content_container,
 .page,
 #main,
 .Blog {
-  max-width: 850px !important; /* 800px〜1000pxの間の850px */
+  max-width: 1200px !important;
   width: 100% !important;
   margin: 0 auto !important;
-  padding: 0 16px !important;
+  padding: 0 24px !important;
   float: none !important;
 }
 
-.post, .post-outer, .heroPost {
-  max-width: 850px !important;
+.post, .post-outer {
+  max-width: 1200px !important;
   margin-left: auto !important;
   margin-right: auto !important;
   box-sizing: border-box !important;
