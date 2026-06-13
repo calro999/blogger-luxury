@@ -63,12 +63,14 @@ def generate_article_with_llm(item):
     image_url = ""
     medium_images = item.get("mediumImageUrls", [])
     if medium_images:
-        image_url = medium_images[0]
+        img_obj = medium_images[0]
+        image_url = img_obj.get("imageUrl", "") if isinstance(img_obj, dict) else img_obj
     else:
         # fallback
         small_images = item.get("smallImageUrls", [])
         if small_images:
-            image_url = small_images[0]
+            img_obj = small_images[0]
+            image_url = img_obj.get("imageUrl", "") if isinstance(img_obj, dict) else img_obj
 
     if image_url:
         # 楽天画像URLのサイズ指定パラメータ (?_ex=128x128 等) を置換して大きいサイズにする
