@@ -28,3 +28,4 @@ discount-store-ufi:10008326
 discount-store-ufi:10008327
 discount-store-ufi:10007383
 otakarasouko:10368164
+discount-store-ufi:10008324
