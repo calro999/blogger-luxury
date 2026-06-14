@@ -23,3 +23,4 @@ lutella:10001812
 gekiyasubeach:10000831
 gekiyasubeach:10001698
 gekiyasubeach:10000830
+hikari-onlineshop:10001447
