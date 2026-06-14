@@ -26,3 +26,4 @@ gekiyasubeach:10000830
 hikari-onlineshop:10001447
 discount-store-ufi:10008326
 discount-store-ufi:10008327
+discount-store-ufi:10007383
