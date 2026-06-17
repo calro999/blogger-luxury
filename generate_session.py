@@ -31,13 +31,19 @@ def main():
         
         state = context.storage_state()
         
-        with open("session.json", "w") as f:
-            json.dump(state, f)
+        # localStorageのバイナリデータによるエラーを防ぐため、cookieのみを抽出
+        minimal_state = {"cookies": state.get("cookies", [])}
+        
+        with open("session.json", "w", encoding="utf-8") as f:
+            json.dump(minimal_state, f)
             
         print("session.json を作成しました。")
-        print("このファイルの内容をBase64エンコードし、GitHub Secrets の BLOGGER_SESSION_B64 に設定してください。")
-        print("\nBase64エンコードコマンド（Macの場合）:")
-        print("base64 -i session.json | pbcopy")
+        print("以下の文字列（Base64エンコード済み）をコピーして、GitHub Secretsの BLOGGER_SESSION_B64 に設定してください：\n")
+        
+        import base64
+        b64_str = base64.b64encode(json.dumps(minimal_state).encode('utf-8')).decode('utf-8')
+        print(b64_str)
+        print("\n=========================================================")
 
         browser.close()
 
