@@ -38,12 +38,22 @@ def main():
             json.dump(minimal_state, f)
             
         print("session.json を作成しました。")
-        print("以下の文字列（Base64エンコード済み）をコピーして、GitHub Secretsの BLOGGER_SESSION_B64 に設定してください：\n")
         
         import base64
+        import subprocess
+        
         b64_str = base64.b64encode(json.dumps(minimal_state).encode('utf-8')).decode('utf-8')
-        print(b64_str)
-        print("\n=========================================================")
+        
+        try:
+            process = subprocess.Popen('pbcopy', env={'LANG': 'en_US.UTF-8'}, stdin=subprocess.PIPE)
+            process.communicate(b64_str.encode('utf-8'))
+            print("\n★★★ Base64文字列をMacのクリップボードに自動コピーしました！ ★★★")
+            print("そのままGitHub Secretsの設定画面で [Command + V] を押して貼り付けてください。")
+            print("=========================================================")
+        except Exception as e:
+            print("自動コピーに失敗しました。以下の文字列を漏れなく全て手動でコピーしてください：\n")
+            print(b64_str)
+            print("\n=========================================================")
 
         browser.close()
 
