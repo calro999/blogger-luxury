@@ -1,4 +1,3 @@
-google-auth
-google-api-python-client
 requests
-google-auth-oauthlib
+playwright
+playwright-stealth
