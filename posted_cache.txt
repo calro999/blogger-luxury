@@ -37,3 +37,4 @@ lutella:10000690
 discount-store-ufi:10008328
 hobbyroute:10002181
 hobbyroute:10002182
+gekiyasubeach:10001702
