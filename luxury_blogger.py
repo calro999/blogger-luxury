@@ -248,7 +248,7 @@ def generate_article_with_llm(item):
     return {"title": "【極上】" + title[:30], "html": fallback_html.strip()}
 
 
-def post_to_blogger(gen_title, content):
+def post_to_blogger(title, content):
     session_b64 = os.environ.get("BLOGGER_SESSION_B64")
     if not session_b64:
         raise ValueError("BLOGGER_SESSION_B64 is not set in environment variables.")
