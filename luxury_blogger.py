@@ -127,7 +127,6 @@ def generate_article_with_llm(item):
    - 商品の魅力的な説明（`<div class="premium-content-body">` と `</div>` で囲む）
    - 極上の贅沢ポイント3選（`<ul class="premium-points-list">` と `<li>` タグを使用）
    - 商品の画像（`<img src="{image_url}" alt="{title}" style="max-width: 100%; height: auto;">`）
-   - アフィリエイトリンク（`<a class="premium-affiliate-btn" href="{url}" target="_blank" rel="noopener noreferrer">商品詳細を見る ＞</a>`）
    - 楽天ROOMへのリンク（`<br><a href="https://room.rakuten.co.jp/jack555/items" target="_blank">✅ 私の楽天ROOMはこちら</a>`）を必ず含めること
 """
 
@@ -242,11 +241,7 @@ def generate_article_with_llm(item):
         <p style="font-size: 15px; margin-bottom: 25px;">特別な癒やしを演出するこちらのスクイーズは、現在 <strong>{price}円</strong> でお求めいただけます。</p>
     </div>
     
-    <div style="text-align: center; margin-top: 15px; margin-bottom: 10px;">
-        <a class="premium-affiliate-btn" href="{url}" target="_blank" rel="noopener noreferrer">
-            プレミアム詳細を見る ＞
-        </a>
-    </div>
+    
 </div>"""
     return {"title": "【極上】" + title[:20], "html": fallback_html.strip()}
 
@@ -442,7 +437,7 @@ def main():
         if not html_content or len(html_content) < 10:
             # AIが失敗した時の絶対的なフォールバックHTML
             image_url = item.get("mediumImageUrls", [{"imageUrl": ""}])[0].get("imageUrl", "") if item.get("mediumImageUrls") else ""
-            html_content = f'<h2>{gen_title}</h2><br><br><img src="{image_url}" alt="商品画像" style="max-width: 100%; height: auto;"><br><br><a href="{url}" target="_blank">商品詳細を見る ＞</a><br><br><a href="https://room.rakuten.co.jp/jack555/items" target="_blank">✅ 私の楽天ROOMはこちら</a>'
+            html_content = f'<h2>{gen_title}</h2><br><br><img src="{image_url}" alt="商品画像" style="max-width: 100%; height: auto;"><br><br><a href="https://room.rakuten.co.jp/jack555/items" target="_blank">✅ 私の楽天ROOMはこちら</a>'
             
         print("--- Generated HTML Content Snippet ---")
         print(html_content[:200])
