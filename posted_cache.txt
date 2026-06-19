@@ -13,3 +13,4 @@ alice00:10004920
 alice00:10004890
 gekiyasubeach:10000830
 gekiyasubeach:10000826
+discount-store-ufi:10008326
