@@ -34,3 +34,4 @@ discount-store-ufi:10008323
 hikari-onlineshop:10001447
 hobbyroute:10002183
 lutella:10000690
+gekiyasubeach:10000829
