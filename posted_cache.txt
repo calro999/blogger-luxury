@@ -30,3 +30,4 @@ hikari-onlineshop:10004207
 encounterwt:10004057
 hobbyroute:10003390
 for-you4:10067514
+discount-store-ufi:10008323
