@@ -55,3 +55,4 @@ hikari-onlineshop:10004206
 kokorone:10053722
 modernrive:10000578
 otakarasouko:10372320
+otakarasouko:10372334
