@@ -45,14 +45,14 @@ def fetch_rakuten_item():
     posted_cache = load_posted_cache()
 
     # 第一キーワードで検索
-    keyword = "MELLOJOY スクイーズ"
+    keyword = "MELLOJOYスクイーズ"
     print(f"Searching Rakuten for primary keyword: {keyword}")
     item = _search_by_keyword(app_id, access_key, keyword, posted_cache)
     if item:
         return item
 
     # フォールバックキーワードで検索
-    fallback_keyword = "高級スクイーズ"
+    fallback_keyword = "スクイーズ"
     print(f"Primary keyword items all posted or empty. Searching Rakuten for fallback keyword: {fallback_keyword}")
     item = _search_by_keyword(app_id, access_key, fallback_keyword, posted_cache)
     if item:
