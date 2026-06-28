@@ -64,3 +64,4 @@ otakarasouko:10372337
 utshoppingstore:10001544
 hikari-onlineshop:10004209
 modernrive:10000612
+otakarasouko:10368164
