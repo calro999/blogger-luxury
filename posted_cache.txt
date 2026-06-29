@@ -69,3 +69,4 @@ japanselect:10023734
 hakuhakushop:10000140
 tigercat:10045569
 tigercat:10034645
+kishi-gum:10032600
