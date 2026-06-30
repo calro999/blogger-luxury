@@ -72,3 +72,4 @@ tigercat:10034645
 kishi-gum:10032600
 superbproducts:10002363
 beautopia:10000887
+kantolifeshop:10002548
