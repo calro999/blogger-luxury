@@ -78,3 +78,4 @@ yuki23:10002134
 festival-plaza:10066862
 kinyoshop:10000039
 tenyo-shop1:10000194
+basicbag:10000200
