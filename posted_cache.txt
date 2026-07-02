@@ -85,3 +85,4 @@ festival-plaza:10056509
 smilekankyo1:10000136
 gosunwood:10008238
 gosunwood:10006815
+sanyodo-shop:10044088
