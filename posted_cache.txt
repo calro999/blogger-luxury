@@ -99,3 +99,4 @@ kishi-gum:10032586
 festival-plaza:10067222
 unique-store:10000196
 wasshoi-mura:10020380
+snnm0726:10001269
