@@ -95,3 +95,4 @@ nihontakaragai:10000175
 festival-plaza:10060000
 drinkland:10000186
 wasshoi-mura:10025031
+kishi-gum:10032586
