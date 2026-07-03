@@ -97,3 +97,4 @@ drinkland:10000186
 wasshoi-mura:10025031
 kishi-gum:10032586
 festival-plaza:10067222
+unique-store:10000196
