@@ -104,3 +104,4 @@ sanyodo-shop:10044468
 snnm0726:10001265
 rainbowbridge:10001647
 tigercat:10044931
+kishi-gum:10032498
