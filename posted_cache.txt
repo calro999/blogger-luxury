@@ -149,3 +149,4 @@ snnm1015:10001958
 festival-plaza:10054677
 smilekankyo1:10000142
 sanyodo-shop:10044471
+sanyodo-shop:10043326
