@@ -172,3 +172,4 @@ gosunwood:10008169
 smart-park:10035909
 fuwaristyle:10000029
 kishi-gum:10032171
+wasshoi-mura:10020637
