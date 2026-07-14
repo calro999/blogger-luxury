@@ -170,3 +170,4 @@ tigercat:10043722
 festival-plaza:10067031
 gosunwood:10008169
 smart-park:10035909
+fuwaristyle:10000029
