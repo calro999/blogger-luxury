@@ -174,3 +174,4 @@ fuwaristyle:10000029
 kishi-gum:10032171
 wasshoi-mura:10020637
 futaba-corp:10007306
+kishi-gum:10032664
