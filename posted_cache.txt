@@ -176,3 +176,4 @@ wasshoi-mura:10020637
 futaba-corp:10007306
 kishi-gum:10032664
 festival-plaza:10067077
+kishi-gum:10032661
