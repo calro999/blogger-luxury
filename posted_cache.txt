@@ -196,3 +196,4 @@ tigercat:10043726
 festival-plus:10056727
 sanyodo-shop:10046744
 festival-plaza:10065480
+kishi-gum:10032530
