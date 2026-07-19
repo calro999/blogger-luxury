@@ -198,3 +198,4 @@ sanyodo-shop:10046744
 festival-plaza:10065480
 kishi-gum:10032530
 festival-plaza:10067043
+festival-plaza:10067039
