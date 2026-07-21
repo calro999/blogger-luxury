@@ -213,3 +213,4 @@ festival-plaza:10067110
 festival-plaza:10064393
 canyonplaza:10001417
 smilekankyo1:10000137
+shimataro:10000508
