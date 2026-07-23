@@ -217,3 +217,4 @@ shimataro:10000508
 festival-plaza:10067223
 smart-park:10036088
 otakarasouko:10378448
+yy-battery:10001735
