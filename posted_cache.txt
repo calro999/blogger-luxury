@@ -220,3 +220,4 @@ otakarasouko:10378448
 yy-battery:10001735
 festival-plus:10063969
 kishi-gum:10032610
+festival-plaza:10067546
