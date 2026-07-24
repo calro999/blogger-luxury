@@ -222,3 +222,4 @@ festival-plus:10063969
 kishi-gum:10032610
 festival-plaza:10067546
 kaeru7:10007529
+kishi-gum:10032470
