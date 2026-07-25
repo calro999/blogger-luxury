@@ -228,3 +228,4 @@ wasshoi-mura:10025034
 auc-hanabiya-gekiyasu:10007013
 auc-yumishop:10028536
 shimataro:10000306
+greenocean:10035681
