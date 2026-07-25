@@ -226,3 +226,4 @@ kishi-gum:10032470
 snnm1015:10000832
 wasshoi-mura:10025034
 auc-hanabiya-gekiyasu:10007013
+auc-yumishop:10028536
