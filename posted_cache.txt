@@ -237,3 +237,4 @@ auc-my-mama:10034577
 nishi-ryutu:10095156
 hypnos:10020527
 festival-plaza:10060009
+wasshoi-mura:10023867
