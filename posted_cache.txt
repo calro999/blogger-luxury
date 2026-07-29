@@ -248,3 +248,4 @@ basicbag:10000363
 sanyodo-shop:10031738
 gosunwood:10008295
 festival-plaza:10058999
+gosunwood:10008249
