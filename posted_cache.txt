@@ -257,3 +257,4 @@ smilekankyo1:10000145
 wasshoi-mura:10025060
 wasshoi-mura:10025089
 festival-plaza:10067155
+wasshoi-mura:10023552
