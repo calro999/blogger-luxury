@@ -259,3 +259,4 @@ wasshoi-mura:10025089
 festival-plaza:10067155
 wasshoi-mura:10023552
 ifull:10000521
+otakarasouko:10380920
