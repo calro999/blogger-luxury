@@ -275,3 +275,4 @@ basicbag:10000256
 goodgoodsshop:10000824
 kishi-gum:10032648
 festival-plaza:10041040
+kishi-gum:10032663
