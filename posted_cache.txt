@@ -273,3 +273,4 @@ smart-park:10036308
 wasshoi-mura:10022441
 basicbag:10000256
 goodgoodsshop:10000824
+kishi-gum:10032648
