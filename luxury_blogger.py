@@ -175,43 +175,7 @@ def generate_article_with_llm(item):
     else:
         print("GITHUB_TOKEN / GH_TOKEN is not set in environment variables.")
 
-    # 2. Pollinations AI (キー不要、フォールバック)
-    pollinations_models = ["openai", "mistral", "llama"]
-    for model in pollinations_models:
-        for attempt in range(3):  # 最大3回リトライ
-            try:
-                print(f"Attempting to generate article with Pollinations AI (model: {model}, attempt: {attempt + 1})...")
-                response = requests.post(
-                    "https://text.pollinations.ai/",
-                    json={
-                        "messages": [
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": prompt}
-                        ],
-                        "model": model
-                    },
-                    timeout=45
-                )
-                if response.status_code == 200 and len(response.text.strip()) > 100:
-                    result_text = response.text.strip()
-                    import json
-                    try:
-                        if "```json" in result_text: result_text = result_text.split("```json", 1)[1]
-                        if "```" in result_text: result_text = result_text.split("```")[0]
-                        result_text = result_text.strip()
-                        parsed = json.loads(result_text)
-                        return parsed
-                    except:
-                        return {"title": "【注目】" + title[:20] + "...", "html": result_text}
-                elif response.status_code == 429:
-                    print(f"Pollinations AI returned 429. Sleeping before retry...")
-                    time.sleep(3)
-                else:
-                    print(f"Pollinations AI ({model}) returned status code: {response.status_code} - {response.text[:200]}")
-                    break  # 429以外はリトライせず次のモデルへ
-            except Exception as e:
-                print(f"Pollinations AI ({model}) failed with exception: {e}")
-                time.sleep(2)
+
 
     # 最終フォールバック: LLMが全滅した場合のテンプレート記事生成
     print("WARNING: All LLM generation attempts failed. Generating article using local premium template.")

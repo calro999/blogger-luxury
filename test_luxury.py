@@ -5,10 +5,10 @@ from luxury_blogger import generate_article_with_llm
 def test_main():
     print("Starting verification test for blogger-luxury (LLM generation only)...")
     
-    # GITHUB_TOKEN または GH_TOKEN が設定されているか確認（ない場合はPollinations AIがフォールバックとして使われます）
+    # GITHUB_TOKEN または GH_TOKEN が設定されているか確認（ない場合は高品質ローカルフォールバックが使われます）
     github_token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
     if not github_token:
-        print("Notice: GITHUB_TOKEN is not set. Will fallback to Pollinations AI (mistral/openai).")
+        print("Notice: GITHUB_TOKEN is not set. Will fallback to high-quality template generator.")
 
     # ダミー商品データ (MELLOJOYスクイーズ)
     dummy_item = {
