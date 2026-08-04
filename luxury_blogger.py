@@ -246,6 +246,30 @@ def proofread_and_optimize_blogger_article(title, html_content):
                     return res_text.strip()
         except Exception as e:
             print(f"Proofread failed: {e}")
+    groq_key = os.environ.get("GROQ_API_KEY")
+    if groq_key:
+        try:
+            print("Proofreading with Groq API...")
+            headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+            payload = {
+                "model": "llama-3.3-70b-versatile",
+                "messages": [
+                    {"role": "system", "content": "あなたはプロのWeb校正者兼SEO/GEOアナリストです。誤字脱字を無くし最高品質のHTML本文のみを出力します。"},
+                    {"role": "user", "content": prompt}
+                ],
+                "temperature": 0.5
+            }
+            resp = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload, timeout=30)
+            if resp.status_code == 200:
+                res_text = resp.json()["choices"][0]["message"]["content"].strip()
+                if "```html" in res_text: res_text = res_text.split("```html", 1)[1].split("```")[0]
+                elif "```" in res_text: res_text = res_text.split("```", 1)[1].split("```")[0]
+                if len(res_text.strip()) > 100:
+                    print("Successfully proofread with Groq API!")
+                    return res_text.strip()
+        except Exception as e:
+            print(f"Groq proofread failed: {e}")
+
     return html_content
 
 def ensure_complete_blogger_article(html_content):
