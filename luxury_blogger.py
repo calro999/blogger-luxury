@@ -52,15 +52,11 @@ def fetch_rakuten_item():
         return item
 
     # フォールバックキーワードで検索
-    fallback_keyword = "スクイーズ"
-    print(f"Primary keyword items all posted or empty. Searching Rakuten for fallback keyword: {fallback_keyword}")
-    item = _search_by_keyword(app_id, access_key, fallback_keyword, posted_cache)
-    if item:
-        return item
+    attributes = ["高級", "ラグジュアリー", "ハイエンド", "限定", "プレミアム", "ブランド"]
+    selected_attribute = random.choice(attributes)
+    keyword = f"アイテム {selected_attribute}"
+    print(f"Searching Rakuten for keyword: {keyword}")
 
-    raise RuntimeError("All fetched items for both primary and fallback keywords have already been posted.")
-
-def _search_by_keyword(app_id, access_key, keyword, posted_cache):
     url = "https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260401"
     params = {
         "applicationId": app_id,
@@ -69,47 +65,45 @@ def _search_by_keyword(app_id, access_key, keyword, posted_cache):
         "format": "json",
         "hits": 30
     }
+    if affiliate_id:
+        params["affiliateId"] = affiliate_id
 
-    try:
-        response = requests.get(url, params=params, timeout=15)
-        if response.status_code != 200:
-            print(f"Rakuten API returned error {response.status_code} for keyword '{keyword}'")
-            return None
-        
-        data = response.json()
-        items = data.get("Items", [])
-        if not items:
-            print(f"No items found for keyword: {keyword}")
-            return None
+    response = requests.get(url, params=params)
+    if response.status_code != 200:
+        raise RuntimeError(f"Failed to fetch from Rakuten API: {response.status_code} - {response.text}")
 
-        for item_wrapper in items:
-            item = item_wrapper.get("Item", {})
-            item_code = item.get("itemCode")
-            if item_code and item_code not in posted_cache:
-                return item
-    except Exception as e:
-        print(f"Error searching for keyword '{keyword}': {e}")
-        return None
+    data = response.json()
+    items = data.get("Items", [])
+    if not items:
+        raise RuntimeError(f"No items found for keyword: {keyword}")
 
-    return None
+    posted_cache = load_posted_cache()
+    for item_wrapper in items:
+        item = item_wrapper.get("Item", {})
+        item_code = item.get("itemCode")
+        if item_code and item_code not in posted_cache:
+            return item
+
+    raise RuntimeError("All fetched items have already been posted.")
 
 def generate_article_with_llm(item):
-    title = item.get("itemName")
-    price = item.get("itemPrice")
-    url = item.get("affiliateUrl") or item.get("itemUrl")
+    title = item.get("itemName", "")
+    price = item.get("itemPrice", "")
+    affiliate_id = os.environ.get("RAKUTEN_AFFILIATE_ID")
+    url = get_rakuten_affiliate_url(item, affiliate_id)
     
     image_url = ""
     medium_images = item.get("mediumImageUrls", [])
     if medium_images:
-        img_obj = medium_images[0]
-        image_url = img_obj.get("imageUrl", "") if isinstance(img_obj, dict) else img_obj
+        image_url = medium_images[0]
     else:
         small_images = item.get("smallImageUrls", [])
         if small_images:
-            img_obj = small_images[0]
-            image_url = img_obj.get("imageUrl", "") if isinstance(img_obj, dict) else img_obj
+            image_url = small_images[0]
 
-    if image_url:    prompt = f"""以下の楽天の商品情報を基にして、ブログ記事のタイトルとHTML本文を生成してください。
+    buy_button_html = f'<div style="text-align: center; margin: 20px 0;"><a href="{url}" target="_blank" rel="noopener noreferrer" style="display:inline-block; padding: 14px 28px; background-color: #bf0000; color: #ffffff; font-weight: bold; font-size: 16px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">🛒 楽天市場で価格・在庫を見る</a></div>'
+
+    prompt = f"""以下の楽天の商品情報を基にして、ブログ記事のタイトルとHTML本文を生成してください。
 【商品名】: {title}
 【価格】: {price}円
 【商品画像URL】: {image_url}
@@ -125,41 +119,8 @@ def generate_article_with_llm(item):
 2. HTML本文の構成：
    - 記事全体を `<div class="premium-squishy-article">` と `</div>` で囲む
    - 商品の魅力的な説明（`<div class="premium-content-body">` と `</div>` で囲む）
-   - 極上の贅沢ポイント3選（`<ul class="premium-points-list">` と `<li>` タグを使用）
+   - おすすめ注目ポイント3選（`<ul class="premium-points-list">` と `<li>` タグを使用）
    - 商品の画像（`<img src="{image_url}" alt="{title}" style="max-width: 100%; height: auto;">`）
-   - 楽天ROOMへのリンク（`<br><a href="https://room.rakuten.co.jp/jack555/items" target="_blank">✅ 私の楽天ROOMはこちら</a>`）を必ず含めること
-"""
-
-    system_prompt = "あなたは高級スクイーズ専門のコレクター兼紹介ブロガーです。SNSで話題の高級インポートスクイーズや、『Mellojoy』などの大人気・レア触感スクイーズを厳選して紹介します。触感フェチや大人のコレクター層に向けて、上品で洗練された、かつ商品の魅力がダイレクトに伝わる記事を日本語のみで執筆してください。毎回完全にユニークで、テンプレートの使い回し感のない文章を作成してください。指示された仕様に完全に従い、前置きやHTMLタグブロックのマークダウン表現などを含めない純粋なHTML本文のみを出力します。"
-
-    # 1. GitHub Models API (GITHUB_TOKENを使用) を最優先
-    github_token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
-    if github_token:
-        try:
-            print("Attempting to generate article with GitHub Models API...")
-            headers = {
-                "Authorization": f"Bearer {github_token}",
-                "Content-Type": "application/json"
-            }
-            payload = {
-                "model": "gpt-4o-mini",
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": prompt}
-                ],
-                "temperature": 0.7
-            }
-            response = requests.post("https://models.inference.ai.azure.com/chat/completions", headers=headers, json=payload, timeout=30)
-            if response.status_code == 200:
-                result_text = response.json()["choices"][0]["message"]["content"].strip()
-                import json
-                try:
-                    # Markdownブロック等を取り除く
-                    if "```json" in result_text: result_text = result_text.split("```json", 1)[1]
-                    if "```" in result_text: result_text = result_text.split("```")[0]
-                    result_text = result_text.strip()
-                    parsed = json.loads(result_text)
-                    return parsed # 辞書を返す
                 except Exception as e:
                     print("JSON Parse error:", e)
                     return {"title": "【注目】" + title[:20] + "...", "html": result_text}
