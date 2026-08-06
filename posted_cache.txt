@@ -277,3 +277,4 @@ kishi-gum:10032648
 festival-plaza:10041040
 kishi-gum:10032663
 aiswitch:10000021
+koiwasyouten250810:10000108
