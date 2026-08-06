@@ -91,7 +91,7 @@ def generate_article_with_llm(item):
     price = item.get("itemPrice", "")
     affiliate_id = os.environ.get("RAKUTEN_AFFILIATE_ID")
     url = get_rakuten_affiliate_url(item, affiliate_id)
-    
+
     image_url = ""
     medium_images = item.get("mediumImageUrls", [])
     if medium_images:
@@ -101,70 +101,177 @@ def generate_article_with_llm(item):
         if small_images:
             image_url = small_images[0]
 
-    buy_button_html = f'<div style="text-align: center; margin: 20px 0;"><a href="{url}" target="_blank" rel="noopener noreferrer" style="display:inline-block; padding: 14px 28px; background-color: #bf0000; color: #ffffff; font-weight: bold; font-size: 16px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">🛒 楽天市場で価格・在庫を見る</a></div>'
+    buy_button_html = (
+        '<div style="text-align: center; margin: 20px 0;">'
+        f'<a href="{url}" target="_blank" rel="noopener noreferrer" '
+        'style="display:inline-block; padding: 14px 28px; background-color: #bf0000; '
+        'color: #ffffff; font-weight: bold; font-size: 16px; border-radius: 8px; '
+        'text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">'
+        '\U0001F6D2 \u697d\u5929\u5e02\u5834\u3067\u4fa1\u683c\u30fb\u5728\u5eab\u3092\u898b\u308b</a></div>'
+    )
 
-    prompt = f"""以下の楽天の商品情報を基にして、ブログ記事のタイトルとHTML本文を生成してください。
-【商品名】: {title}
-【価格】: {price}円
-【商品画像URL】: {image_url}
-【アフィリエイトURL】: {url}
-【楽天ROOM】: https://room.rakuten.co.jp/jack555/items
+    prompt = (
+        "\u4ee5\u4e0b\u306e\u697d\u5929\u306e\u5546\u54c1\u60c5\u5831\u3092\u57fa\u306b\u3057\u3066\u3001"
+        "\u30d6\u30ed\u30b0\u8a18\u4e8b\u306e\u30bf\u30a4\u30c8\u30eb\u3068HTML\u672c\u6587\u3092\u751f\u6210\u3057\u3066\u304f\u3060\u3055\u3044\u3002\n"
+        f"\u5546\u54c1\u540d: {title}\n"
+        f"\u4fa1\u683c: {price}\u5186\n"
+        f"\u5546\u54c1\u753b\u50cfURL: {image_url}\n"
+        f"\u30a2\u30d5\u30a3\u30ea\u30a8\u30a4\u30c8URL: {url}\n"
+        "\u697d\u5929ROOM: https://room.rakuten.co.jp/jack555/items\n\n"
+        "\u4ee5\u4e0b\u306e\u8981\u4ef6\u3092\u53b3\u683c\u306b\u9075\u5b88\u3057\u3066\u304f\u3060\u3055\u3044\uff1a\n"
+        "1. \u51fa\u529b\u306f\u4ee5\u4e0b\u306eJSON\u30d5\u30a9\u30fc\u30de\u30c3\u30c8\u306e\u307f\u3068\u3057\u3066\u304f\u3060\u3055\u3044\u3002"
+        "\u4ed6\u306e\u30c6\u30ad\u30b9\u30c8\u306f\u4e00\u5207\u542b\u3081\u306a\u3044\u3067\u304f\u3060\u3055\u3044\u3002\n"
+        '{"title": "\u30ad\u30e3\u30c3\u30c1\u30fc\u306a\u30bf\u30a4\u30c8\u30eb\uff08\u6700\u592735\u6587\u5b57\uff09",'
+        ' "html": "\u7d14\u7c8b\u306aHTML\u672c\u6587"}\n'
+        "2. HTML\u672c\u6587\u306e\u69cb\u6210\uff1a\n"
+        '   - \u8a18\u4e8b\u5168\u4f53\u3092 <div class=\"premium-squishy-article\"> \u3068 </div> \u3067\u56f2\u3080\n'
+        '   - \u5546\u54c1\u306e\u9b45\u529b\u7684\u306a\u8aac\u660e\uff08<div class=\"premium-content-body\"> \u3068 </div> \u3067\u56f2\u3080\uff09\n'
+        "3. \u5546\u54c1\u306e\u5177\u4f53\u7684\u306a\u9b45\u529b\u30fb\u7279\u5fb4\u3092\u76db\u308a\u8fbc\u3093\u3067\u304f\u3060\u3055\u3044\u3002\n"
+        "4. \u65e5\u672c\u8a9e\u3067\u3001\u30d7\u30ec\u30df\u30a2\u30e0\u611f\u306e\u3042\u308b\u6587\u4f53\u3067\u66f8\u3044\u3066\u304f\u3060\u3055\u3044\u3002\n"
+    )
 
-以下の要件を厳格に遵守してください：
-1. 出力は以下のJSONフォーマットのみとしてください。他のテキストは一切含めないでください。
-{{
-    "title": "ここにキャッチーで魅力的なタイトル（商品名の単なる羅列は禁止、最大35文字）",
-    "html": "ここに純粋なHTML本文（以下の構成に従う）"
-}}
-2. HTML本文の構成：
-   - 記事全体を `<div class="premium-squishy-article">` と `</div>` で囲む
-   - 商品の魅力的な説明（`<div class="premium-content-body">` と `</div>` で囲む）
-   - おすすめ注目ポイント3選（`<ul class="premium-points-list">` と `<li>` タグを使用）
-   - 商品の画像（`<img src="{image_url}" alt="{title}" style="max-width: 100%; height: auto;">`）
-                except Exception as e:
-                    print("JSON Parse error:", e)
-                    return {"title": "【注目】" + title[:20] + "...", "html": result_text}
-                if "```html" in result:
-                    result = result.split("```html", 1)[1]
-                if "```" in result:
-                    result = result.split("```", 1)[0]
-                return result.strip()
+    system_message = (
+        "\u3042\u306a\u305f\u306f\u9ad8\u7d1a\u5546\u54c1\u5c02\u9580\u306e\u30d6\u30ed\u30b0\u30e9\u30a4\u30bf\u30fc\u3067\u3059\u3002"
+        "\u6307\u5b9a\u3055\u308c\u305fJSON\u30d5\u30a9\u30fc\u30de\u30c3\u30c8\uff08title\u3068html\u306e\u307f\uff09\u3067\u51fa\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002"
+    )
+
+    def try_parse_json(text, fallback_text):
+        import json as _json
+        t = text.strip()
+        if t.startswith("```"):
+            parts = t.split("```")
+            t = parts[2] if len(parts) >= 3 else t.replace("```json", "").replace("```", "")
+        t = t.strip()
+        try:
+            data = _json.loads(t)
+            if "title" in data and "html" in data:
+                return data
+        except Exception:
+            pass
+        return {"title": "\u6ce8\u76ee" + title[:20] + "...", "html": fallback_text or t}
+
+    # 1. Gemini API
+    gemini_key = os.environ.get("GEMINI_API_KEY")
+    if gemini_key:
+        for model_name in ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-1.5-flash"]:
+            try:
+                api_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={gemini_key}"
+                payload = {
+                    "contents": [{"parts": [{"text": f"{system_message}\n\n{prompt}"}]}],
+                    "generationConfig": {"temperature": 0.8, "maxOutputTokens": 2048}
+                }
+                if "2.5" in model_name:
+                    payload["generationConfig"]["thinkingConfig"] = {"thinkingBudget": 0}
+                res = requests.post(api_url, json=payload, timeout=45)
+                if res.status_code == 200:
+                    data = res.json()
+                    candidate = data.get("candidates", [{}])[0]
+                    parts_list = candidate.get("content", {}).get("parts", [])
+                    text = "".join(p.get("text", "") for p in parts_list if p.get("text")).strip()
+                    if len(text) > 50:
+                        print(f"Generated article via Gemini API ({model_name}).")
+                        return try_parse_json(text, text)
+                else:
+                    print(f"Gemini API ({model_name}) returned {res.status_code}: {res.text[:100]}")
+            except Exception as e:
+                print(f"Gemini API ({model_name}) error: {e}")
+
+    # 2. Groq API
+    groq_key = os.environ.get("GROQ_API_KEY")
+    if groq_key:
+        for model_name in ["llama-3.3-70b-versatile", "llama3-70b-8192"]:
+            try:
+                headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+                payload = {
+                    "model": model_name,
+                    "messages": [{"role": "system", "content": system_message}, {"role": "user", "content": prompt}],
+                    "temperature": 0.8,
+                    "max_tokens": 2048
+                }
+                res = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload, timeout=45)
+                if res.status_code == 200:
+                    text = res.json()["choices"][0]["message"]["content"].strip()
+                    if len(text) > 50:
+                        print(f"Generated article via Groq API ({model_name}).")
+                        return try_parse_json(text, text)
+                else:
+                    print(f"Groq API ({model_name}) returned {res.status_code}: {res.text[:100]}")
+            except Exception as e:
+                print(f"Groq API ({model_name}) error: {e}")
+
+    # 3. OpenRouter API
+    openrouter_key = os.environ.get("OPENROUTER_API_KEY")
+    if openrouter_key:
+        for model_name in ["google/gemma-3-27b-it:free", "mistralai/mistral-nemo:free"]:
+            try:
+                headers = {
+                    "Authorization": f"Bearer {openrouter_key}",
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": "https://github.com",
+                    "X-Title": "LuxuryBlogger"
+                }
+                payload = {
+                    "model": model_name,
+                    "messages": [{"role": "system", "content": system_message}, {"role": "user", "content": prompt}],
+                    "temperature": 0.8,
+                    "max_tokens": 2048
+                }
+                res = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload, timeout=45)
+                if res.status_code == 200:
+                    text = res.json()["choices"][0]["message"]["content"].strip()
+                    if len(text) > 50:
+                        print(f"Generated article via OpenRouter ({model_name}).")
+                        return try_parse_json(text, text)
+                else:
+                    print(f"OpenRouter ({model_name}) returned {res.status_code}: {res.text[:100]}")
+            except Exception as e:
+                print(f"OpenRouter ({model_name}) error: {e}")
+
+    # 4. GitHub Models API
+    gh_token = os.environ.get("GH_TOKEN")
+    if gh_token and not gh_token.startswith("ghs_"):
+        try:
+            headers = {"Authorization": f"Bearer {gh_token}", "Content-Type": "application/json"}
+            payload = {
+                "model": "gpt-4o-mini",
+                "messages": [{"role": "system", "content": system_message}, {"role": "user", "content": prompt}],
+                "temperature": 0.8,
+                "max_tokens": 2048
+            }
+            res = requests.post("https://models.inference.ai.azure.com/chat/completions", headers=headers, json=payload, timeout=45)
+            if res.status_code == 200:
+                text = res.json()["choices"][0]["message"]["content"].strip()
+                if len(text) > 50:
+                    print("Generated article via GitHub Models API.")
+                    return try_parse_json(text, text)
             else:
-                print(f"GitHub Models API returned status code: {response.status_code} - {response.text}")
+                print(f"GitHub Models API returned {res.status_code}: {res.text[:100]}")
         except Exception as e:
-            print(f"GitHub Models API failed with exception: {e}")
-    else:
-        print("GITHUB_TOKEN / GH_TOKEN is not set in environment variables.")
+            print(f"GitHub Models API error: {e}")
 
-
-
-    # 最終フォールバック: LLMが全滅した場合のテンプレート記事生成
-    print("WARNING: All LLM generation attempts failed. Generating article using local premium template.")
-    fallback_html = f"""<div class="premium-squishy-article">
-    <div class="premium-image-wrapper">
-        <img src="{image_url}" alt="{title}" />
-    </div>
-    
-    <div class="premium-content-body">
-        <h2 style="font-size: 20px; color: #2c2302; margin-top: 10px; margin-bottom: 15px;">【極上レア触感】{title}</h2>
-        
-        <p>「贅沢スクイーズLife」がお届けする、極上のリラックスアイテム。SNSで大きな話題を呼んでいる「Mellojoy」シリーズの高級インポートスクイーズをご紹介します。</p>
-        
-        <p>手に吸い付くような独特のもちもち感と、時間をかけてゆっくりと戻る超低反発のプレミアムな触感。ただ可愛いだけでなく、見ているだけで心が満たされる高いデザイン性が、忙しい毎日に極上の癒やしと贅沢なひとときをもたらしてくれます。</p>
-        
-        <ul class="premium-points-list">
-            <li><strong>極上の低反発仕様：</strong> 何度も握りたくなる極上のレア触感で、大人のための上質な癒やしを提供します。</li>
-            <li><strong>洗練されたインポートデザイン：</strong> お部屋のインテリアとしても美しく映える、プレミアム感溢れる仕上がり。</li>
-            <li><strong>特別な香りと質感：</strong> 所有する喜びを満たしてくれる、こだわり抜かれた贅沢なクオリティ。</li>
-        </ul>
-        
-        <p style="font-size: 15px; margin-bottom: 25px;">特別な癒やしを演出するこちらのスクイーズは、現在 <strong>{price}円</strong> でお求めいただけます。</p>
-    </div>
-    
-    
-</div>"""
+    print("WARNING: All LLM generation attempts failed. Using local template.")
+    fallback_html = (
+        '<div class="premium-squishy-article">'
+        f'<div class="premium-image-wrapper"><img src="{image_url}" alt="{title}" /></div>'
+        '<div class="premium-content-body">'
+        f'<h2 style="font-size: 20px; color: #2c2302; margin-top: 10px; margin-bottom: 15px;">{title}</h2>'
+        '<p>\u3053\u3061\u3089\u306e\u5546\u54c1\u3092\u3054\u7d39\u4ecb\u3057\u307e\u3059\u3002'
+        '\u30d7\u30ec\u30df\u30a2\u30e0\u306a\u54c1\u8cea\u3068\u6d17\u7df4\u3055\u308c\u305f\u30c7\u30b6\u30a4\u30f3\u304c\u9b45\u529b\u306e\u30a2\u30a4\u30c6\u30e0\u3067\u3059\u3002</p>'
+        '<ul class="premium-points-list">'
+        '<li><strong>\u9ad8\u54c1\u8cea\u306a\u4ed5\u69d8\uff1a</strong> '
+        '\u4e0a\u8cea\u306a\u7d20\u6750\u3068\u4e01\u5be7\u306a\u4ed5\u4e0a\u304c\u308a\u304c\u5149\u308b\u4e00\u54c1\u3067\u3059\u3002</li>'
+        '<li><strong>\u30c7\u30b6\u30a4\u30f3\u6027\uff1a</strong> '
+        '\u30a4\u30f3\u30c6\u30ea\u30a2\u3068\u3057\u3066\u3082\u6620\u3048\u308b\u6d17\u7df4\u3055\u308c\u305f\u30c7\u30b6\u30a4\u30f3\u3002</li>'
+        '<li><strong>\u30b3\u30b9\u30c8\u30d1\u30d5\u30a9\u30fc\u30de\u30f3\u30b9\uff1a</strong> '
+        '\u3053\u306e\u30af\u30aa\u30ea\u30c6\u30a3\u3067\u3053\u306e\u4fa1\u683c\u306f\u898b\u9003\u305b\u307e\u305b\u3093\u3002</li>'
+        '</ul>'
+        f'<p style="font-size: 15px; margin-bottom: 25px;">\u73fe\u5728 <strong>{price}\u5186</strong> \u3067\u304a\u6c42\u3081\u3044\u305f\u3060\u3051\u307e\u3059\u3002</p>'
+        '</div>'
+        f'{buy_button_html}'
+        '</div>'
+    )
     return {
-        "title": f"【極上触感】{title[:25]}...",
+        "title": f"\u6ce8\u76ee\u30a2\u30a4\u30c6\u30e0 {title[:25]}...",
         "html": fallback_html
     }
 
@@ -439,12 +546,11 @@ def post_to_blogger(title, content):
 
 
 def generate_room_comment_with_llm(item):
-    import urllib.parse
     import random
     title = item.get("itemName") or item.get("title") or ""
     price = item.get("itemPrice") or item.get("price") or ""
     caption = item.get("itemCaption") or item.get("catchcopy") or ""
-    
+
     prompt = f"""以下の楽天の商品情報を基にして、楽天ROOM用の紹介コメント（400文字以内）を生成してください。
 【商品名】: {title}
 【価格】: {price}円
@@ -465,30 +571,104 @@ def generate_room_comment_with_llm(item):
         "商品の魅力を共感たっぷりに伝えてください。"
     )
 
-    # 1. GitHub Models API
-    github_token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
-    if github_token:
-        for model_name in ["gpt-4o-mini", "gpt-4o", "Phi-3.5-mini-instruct", "Meta-Llama-3.1-8B-Instruct"]:
+    def clean_text(text):
+        return text.replace("```", "").strip()
+
+    # 1. Gemini API（最優先。thinking無効化・全parts結合で安定化）
+    gemini_key = os.environ.get("GEMINI_API_KEY")
+    if gemini_key:
+        for model_name in ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-1.5-flash"]:
+            try:
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={gemini_key}"
+                payload = {
+                    "contents": [{"parts": [{"text": f"{system_message}\n\n{prompt}"}]}],
+                    "generationConfig": {"temperature": 0.9, "maxOutputTokens": 600}
+                }
+                if "2.5" in model_name:
+                    payload["generationConfig"]["thinkingConfig"] = {"thinkingBudget": 0}
+                res = requests.post(url, json=payload, timeout=30)
+                if res.status_code == 200:
+                    data = res.json()
+                    candidate = data.get("candidates", [{}])[0]
+                    parts = candidate.get("content", {}).get("parts", [])
+                    text = clean_text("".join(p.get("text", "") for p in parts if p.get("text")))
+                    if len(text) > 30:
+                        print(f"Successfully generated ROOM comment via Gemini API ({model_name}).")
+                        return text
+                    finish = candidate.get("finishReason", "UNKNOWN")
+                    print(f"Gemini ({model_name}) short/empty. finishReason={finish}, text_len={len(text)}")
+                else:
+                    print(f"Gemini API ({model_name}) returned {res.status_code}: {res.text[:150]}")
+            except Exception as e:
+                print(f"Gemini API ({model_name}) error: {e}")
+
+    # 2. Groq API
+    groq_key = os.environ.get("GROQ_API_KEY")
+    if groq_key:
+        for model_name in ["llama-3.3-70b-versatile", "llama3-70b-8192", "llama3-8b-8192"]:
+            try:
+                headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+                payload = {
+                    "model": model_name,
+                    "messages": [{"role": "system", "content": system_message}, {"role": "user", "content": prompt}],
+                    "temperature": 0.8,
+                    "max_tokens": 600
+                }
+                res = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload, timeout=25)
+                if res.status_code == 200:
+                    text = clean_text(res.json()["choices"][0]["message"]["content"])
+                    if len(text) > 30:
+                        print(f"Successfully generated ROOM comment via Groq API ({model_name}).")
+                        return text
+                else:
+                    print(f"Groq API ({model_name}) returned {res.status_code}: {res.text[:100]}")
+            except Exception as e:
+                print(f"Groq API ({model_name}) error: {e}")
+
+    # 3. OpenRouter API（有効な無料モデルを使用）
+    openrouter_key = os.environ.get("OPENROUTER_API_KEY")
+    if openrouter_key:
+        for model_name in ["google/gemma-3-27b-it:free", "mistralai/mistral-nemo:free", "meta-llama/llama-3.2-3b-instruct:free"]:
             try:
                 headers = {
-                    "Authorization": f"Bearer {github_token}",
-                    "Content-Type": "application/json"
+                    "Authorization": f"Bearer {openrouter_key}",
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": "https://github.com",
+                    "X-Title": "RakutenRoomBot"
                 }
                 payload = {
                     "model": model_name,
-                    "messages": [
-                        {"role": "system", "content": system_message},
-                        {"role": "user", "content": prompt}
-                    ],
-                    "temperature": 0.7
+                    "messages": [{"role": "system", "content": system_message}, {"role": "user", "content": prompt}],
+                    "temperature": 0.8,
+                    "max_tokens": 600
                 }
-                res = requests.post("https://models.inference.ai.azure.com/chat/completions", headers=headers, json=payload, timeout=20)
+                res = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload, timeout=30)
                 if res.status_code == 200:
-                    text = res.json()["choices"][0]["message"]["content"].strip()
-                    if "```" in text:
-                        text = text.replace("```", "")
-                    text = text.strip()
-                    if len(text) > 20:
+                    text = clean_text(res.json()["choices"][0]["message"]["content"])
+                    if len(text) > 30:
+                        print(f"Successfully generated ROOM comment via OpenRouter ({model_name}).")
+                        return text
+                else:
+                    print(f"OpenRouter ({model_name}) returned {res.status_code}: {res.text[:100]}")
+            except Exception as e:
+                print(f"OpenRouter ({model_name}) error: {e}")
+
+    # 4. GitHub Models API（GH_TOKENがPATの場合のみ）
+    gh_token = os.environ.get("GH_TOKEN")
+    if gh_token and not gh_token.startswith("ghs_"):
+        for model_name in ["gpt-4o-mini", "gpt-4o", "Meta-Llama-3.1-8B-Instruct"]:
+            try:
+                headers = {"Authorization": f"Bearer {gh_token}", "Content-Type": "application/json"}
+                payload = {
+                    "model": model_name,
+                    "messages": [{"role": "system", "content": system_message}, {"role": "user", "content": prompt}],
+                    "temperature": 0.8,
+                    "max_tokens": 600
+                }
+                res = requests.post("https://models.inference.ai.azure.com/chat/completions", headers=headers, json=payload, timeout=25)
+                if res.status_code == 200:
+                    text = clean_text(res.json()["choices"][0]["message"]["content"])
+                    if len(text) > 30:
                         print(f"Successfully generated ROOM comment via GitHub Models API ({model_name}).")
                         return text
                 else:
@@ -496,98 +676,11 @@ def generate_room_comment_with_llm(item):
             except Exception as e:
                 print(f"GitHub Models API ({model_name}) error: {e}")
 
-    # 2. Gemini API
-    gemini_key = os.environ.get("GEMINI_API_KEY")
-    if gemini_key:
-        for model_name in ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]:
-            try:
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={gemini_key}"
-                payload = {
-                    "contents": [
-                        {
-                            "parts": [
-                                {"text": f"{system_message}\n\n{prompt}"}
-                            ]
-                        }
-                    ]
-                }
-                res = requests.post(url, json=payload, timeout=20)
-                if res.status_code == 200:
-                    data = res.json()
-                    text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "").strip()
-                    if "```" in text:
-                        text = text.replace("```", "")
-                    text = text.strip()
-                    if len(text) > 20:
-                        print(f"Successfully generated ROOM comment via Gemini API ({model_name}).")
-                        return text
-                else:
-                    print(f"Gemini API ({model_name}) returned {res.status_code}: {res.text[:100]}")
-            except Exception as e:
-                print(f"Gemini API ({model_name}) error: {e}")
-
-    # 3. Groq API
-    groq_key = os.environ.get("GROQ_API_KEY")
-    if groq_key:
-        for model_name in ["llama-3.3-70b-versatile", "llama3-8b-8192"]:
-            try:
-                headers = {
-                    "Authorization": f"Bearer {groq_key}",
-                    "Content-Type": "application/json"
-                }
-                payload = {
-                    "model": model_name,
-                    "messages": [
-                        {"role": "system", "content": system_message},
-                        {"role": "user", "content": prompt}
-                    ],
-                    "temperature": 0.7
-                }
-                res = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload, timeout=20)
-                if res.status_code == 200:
-                    text = res.json()["choices"][0]["message"]["content"].strip()
-                    if "```" in text:
-                        text = text.replace("```", "")
-                    text = text.strip()
-                    if len(text) > 20:
-                        print(f"Successfully generated ROOM comment via Groq API ({model_name}).")
-                        return text
-            except Exception as e:
-                print(f"Groq API ({model_name}) error: {e}")
-
-    # 4. OpenRouter API
-    openrouter_key = os.environ.get("OPENROUTER_API_KEY")
-    if openrouter_key:
-        for model_name in ["google/gemini-flash-1.5-exp", "meta-llama/llama-3.2-1b-instruct:free"]:
-            try:
-                headers = {
-                    "Authorization": f"Bearer {openrouter_key}",
-                    "Content-Type": "application/json"
-                }
-                payload = {
-                    "model": model_name,
-                    "messages": [
-                        {"role": "system", "content": system_message},
-                        {"role": "user", "content": prompt}
-                    ]
-                }
-                res = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload, timeout=20)
-                if res.status_code == 200:
-                    text = res.json()["choices"][0]["message"]["content"].strip()
-                    if "```" in text:
-                        text = text.replace("```", "")
-                    text = text.strip()
-                    if len(text) > 20:
-                        print(f"Successfully generated ROOM comment via OpenRouter ({model_name}).")
-                        return text
-            except Exception as e:
-                print(f"OpenRouter ({model_name}) error: {e}")
-
     print("WARNING: All LLM API calls failed. Generating dynamic item-aware comment.")
     clean_title = title.replace("【", "").replace("】", "").replace("！", "").replace("✨", "")[:45]
     words = [w for w in clean_title.split() if len(w) > 1]
     keyword = words[0] if words else "おすすめ"
-    
+
     starters = [
         f"これ気になってた！「{clean_title}」すごく良さそうで目をつけてました✨",
         f"これかわいい！「{clean_title}」のデザインに一目惚れしちゃった💕",
@@ -596,7 +689,7 @@ def generate_room_comment_with_llm(item):
         f"これ便利だよ！生活のクオリティが上がりそうな「{clean_title}」✨"
     ]
     starter = random.choice(starters)
-    
+
     bodies = [
         "実用性抜群で見た目のセンスも最高のアイテム！自分用はもちろんギフトにもぴったりだね😊",
         "使ってみた人の評価も高くて期待大！毎日の生活がもっと楽しくなりそう✨",
@@ -604,9 +697,10 @@ def generate_room_comment_with_llm(item):
         "このクオリティでこの価格は本当に魅力的！見つけたら早めのチェックがおすすめ👍"
     ]
     body = random.choice(bodies)
-    
+
     price_info = f"（価格: {price}円）" if price else ""
     return f"{starter}\n\n{body}\n{price_info}\n\n#{keyword} #楽天市場 #おすすめアイテム #コレ"
+
 
 
 def post_to_rakuten_room(item_code, comment):
