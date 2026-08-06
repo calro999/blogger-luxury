@@ -315,6 +315,7 @@ def generate_article_with_llm(item):
 
     print("WARNING: All online LLM generation attempts failed or rate limited. Generating high-quality tailored fallback HTML.")
     clean_title = title.replace("【", "").replace("】", "")[:35]
+    img_tag = f'<img src="{image_url}" alt="{clean_title}" style="max-width: 100%; height: auto;"><br>' if image_url else ""
     fallback_html = (
         f'<div class="article-wrapper">'
         f'<div class="content-body">'
@@ -326,7 +327,7 @@ def generate_article_with_llm(item):
         f'<li><b>おすすめポイント2</b>：使いやすさと機能性に優れ、日常生活で大活躍！</li>'
         f'<li><b>おすすめポイント3</b>：自分用にはもちろん、大切な方へのプレゼントにも最適！</li>'
         f'</ul>'
-        f'{"<img src='" + image_url + "' alt='" + clean_title + "' style='max-width: 100%; height: auto;'><br>" if image_url else ""}'
+        f'{img_tag}'
         f'{buy_button_html}'
         f'<br><a href="https://room.rakuten.co.jp/jack555/items" target="_blank">✅ 私の楽天ROOMはこちら</a>'
         f'</div>'
