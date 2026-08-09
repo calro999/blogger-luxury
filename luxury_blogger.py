@@ -101,48 +101,27 @@ def fetch_rakuten_item():
 
     posted_cache = load_posted_cache()
 
-    # 第一キーワードで検索
-    keyword = "MELLOJOYスクイーズ"
-    print(f"Searching Rakuten for primary keyword: {keyword}")
-    item = _search_by_keyword(app_id, access_key, keyword, posted_cache)
-    if item:
-        return item
+    squishy_keywords = [
+        "MELLOJOY スクイーズ",
+        "ブルーム スクイーズ",
+        "iBloom スクイーズ",
+        "スクイーズ リアル パン",
+        "スクイーズ リアル スイーツ",
+        "スクイーズ 低反発",
+        "マザーガーデン スクイーズ",
+        "スクイーズ プレミアム",
+        "スクイーズ 限定",
+        "スクイーズ もちもち"
+    ]
+    random.shuffle(squishy_keywords)
 
-    # フォールバックキーワードで検索
-    attributes = ["高級", "ラグジュアリー", "ハイエンド", "限定", "プレミアム", "ブランド"]
-    selected_attribute = random.choice(attributes)
-    keyword = f"アイテム {selected_attribute}"
-    print(f"Searching Rakuten for keyword: {keyword}")
-
-    url = "https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260401"
-    params = {
-        "applicationId": app_id,
-        "accessKey": access_key,
-        "keyword": keyword,
-        "format": "json",
-        "hits": 30
-    }
-    affiliate_id = os.environ.get("RAKUTEN_AFFILIATE_ID")
-    if affiliate_id:
-        params["affiliateId"] = affiliate_id
-
-    response = requests.get(url, params=params)
-    if response.status_code != 200:
-        raise RuntimeError(f"Failed to fetch from Rakuten API: {response.status_code} - {response.text}")
-
-    data = response.json()
-    items = data.get("Items", [])
-    if not items:
-        raise RuntimeError(f"No items found for keyword: {keyword}")
-
-    posted_cache = load_posted_cache()
-    for item_wrapper in items:
-        item = item_wrapper.get("Item", {})
-        item_code = item.get("itemCode")
-        if item_code and item_code not in posted_cache:
+    for kw in squishy_keywords:
+        print(f"Searching Rakuten for squishy keyword: {kw}")
+        item = _search_by_keyword(app_id, access_key, kw, posted_cache)
+        if item:
             return item
 
-    raise RuntimeError("All fetched items have already been posted.")
+    raise RuntimeError("No unposted squishy items found.")
 
 def generate_article_with_llm(item):
     title = item.get("itemName", "")
@@ -615,24 +594,23 @@ def generate_room_comment_with_llm(item):
     price = item.get("itemPrice") or item.get("price") or ""
     caption = item.get("itemCaption") or item.get("catchcopy") or ""
 
-    prompt = f"""以下の楽天の商品情報を基にして、楽天ROOM用の紹介コメント（400文字以内）を生成してください。
+    prompt = f"""以下の高級・人気スクイーズの商品情報を基にして、楽天ROOM用の魅力的な紹介コメント（400文字以内）を生成してください。
 【商品名】: {title}
 【価格】: {price}円
 【商品説明・特徴】: {caption[:200]}
 
 以下の要件を厳格に遵守してください：
-1. 口調・トーン：「これ気になってた！」「これかわいい！」「これ便利だよ！」といった親しみやすく共感できる会話調にすること。
+1. 口調・トーン：高級スクイーズ愛好家・コレクターに刺さる自然な語り口とし、「これかわいい！」「これ気になってた！」「これ便利だよ！」などの安易な定型フレーズは絶対に使用しないでください。触感・低反発の心地よさ・香り・リアルな造形美など、商品の具体的魅力を解説してください。
 2. 文字数：400文字以内（厳守。超えると投稿エラーになります）。
 3. 絵文字：5〜8個使用して華やかにすること。
-4. ハッシュタグ：3〜5個（商品のカテゴリや関連するもの）含め、末尾に「#楽天市場」を必ず含めること。
+4. ハッシュタグ：3〜5個（「#スクイーズ #低反発 #MELLOJOY #ブルーム」等、関連タグ）含め、末尾に「#楽天市場」を必ず含めること。
 5. URLや疑似リンク、プレースホルダー（「[リンクはこちら]」など）は絶対に含めないでください。
 6. 出力は紹介コメントのテキストのみとし、前置きやMarkdownの装飾コードブロック等は一切含めないでください。
 """
 
     system_message = (
-        "あなたは楽天ROOMでフォロワー急増中の人気インフルエンサーです。"
-        "「これ気になってた！」「これかわいい！」「これ便利だよ！」などの親しみやすい口調で、"
-        "商品の魅力を共感たっぷりに伝えてください。"
+        "あなたはプレミアムスクイーズ専門のトップコレクター・インフルエンサーです。"
+        "定型フレーズを排除し、スクイーズの質感・もちもち感・リアルなデザインや癒やし効果がリアルに伝わる最高品質のオリジナル紹介文を作成してください。"
     )
 
     def clean_text(text):
@@ -742,28 +720,26 @@ def generate_room_comment_with_llm(item):
 
     print("WARNING: All LLM API calls failed. Generating dynamic item-aware comment.")
     clean_title = title.replace("【", "").replace("】", "").replace("！", "").replace("✨", "")[:45]
-    words = [w for w in clean_title.split() if len(w) > 1]
-    keyword = words[0] if words else "おすすめ"
 
     starters = [
-        f"これ気になってた！「{clean_title}」すごく良さそうで目をつけてました✨",
-        f"これかわいい！「{clean_title}」のデザインに一目惚れしちゃった💕",
-        f"これ便利だよ！「{clean_title}」は持っておくと日常で大活躍しそう👍",
-        f"これ気になってた！話題の「{clean_title}」を見つけて即チェック🎁",
-        f"これ便利だよ！生活のクオリティが上がりそうな「{clean_title}」✨"
+        f"極上の低反発触感！『{clean_title}』のモチモチ感がたまらない贅沢スクイーズです✨",
+        f"スクイーズ好き必見！『{clean_title}』のリアルな見た目と柔らかさに癒やされる一品💕",
+        f"大人気プレミアムスクイーズ『{clean_title}』を手に入れて至福の癒やしタイムをアイテムに追加👍",
+        f"見逃せない注目作品！『{clean_title}』の握り心地と甘い香り・質感が最高すぎます🎁",
+        f"コレクター垂涎の『{clean_title}』！飾っても触っても大満足のクオリティ✨"
     ]
     starter = random.choice(starters)
 
     bodies = [
-        "実用性抜群で見た目のセンスも最高のアイテム！自分用はもちろんギフトにもぴったりだね😊",
-        "使ってみた人の評価も高くて期待大！毎日の生活がもっと楽しくなりそう✨",
-        "細部までこだわりを感じる優秀アイテム。気になる人はぜひチェックしてみてね🛍️",
-        "このクオリティでこの価格は本当に魅力的！見つけたら早めのチェックがおすすめ👍"
+        "しっとりとした低反発素材で、一度触るとクセになる心地よさ！手元に置いておくだけでストレス解消になります😊",
+        "本物そっくりの高いクオリティと可愛いデザイン！部屋のインテリアとしても映える最高の一品✨",
+        "スクイーズファンならずとも思わず笑顔になる満足度。プレゼントにも大人気のアイテムです🛍️",
+        "プレミアムな質感と丁寧な作り込み。完売前にぜひチェックしてみてください👍"
     ]
     body = random.choice(bodies)
 
     price_info = f"（価格: {price}円）" if price else ""
-    return f"{starter}\n\n{body}\n{price_info}\n\n#{keyword} #楽天市場 #おすすめアイテム #コレ"
+    return f"{starter}\n\n{body}\n{price_info}\n\n#スクイーズ #低反発 #癒やしグッズ #楽天市場 #コレ"
 
 
 
