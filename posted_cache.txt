@@ -335,3 +335,4 @@ farson:10008736
 vaps:10189328
 tnets-store:10001884
 alice00:10005072
+friday8shop:10001526
