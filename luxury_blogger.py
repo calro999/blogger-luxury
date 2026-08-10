@@ -74,9 +74,16 @@ def _search_by_keyword(app_id, access_key, keyword, posted_cache):
         "format": "json",
         "hits": 30
     }
-    affiliate_id = os.environ.get("RAKUTEN_AFFILIATE_ID")
     if affiliate_id:
         params["affiliateId"] = affiliate_id
+
+    # スクィーズ（玩具・ホビー）と無関係な商品を除外するためのNGワードリスト
+    ng_words = [
+        "洗剤", "モアマン", "moerman", "掃除", "清掃", "ワイパー", "窓拭き", 
+        "ガラス清掃", "スクイジー", "スクイジーデラックス", "ブラックエッセンス",
+        "ディッシュウォッシュ", "柔軟剤", "シャンプー", "コンディショナー", "ボディソープ",
+        "キッチン洗剤", "水切り", "水切りワイパー", "ゴムスクイジー"
+    ]
 
     try:
         response = requests.get(url, params=params, timeout=15)
@@ -86,6 +93,15 @@ def _search_by_keyword(app_id, access_key, keyword, posted_cache):
             for item_wrapper in items:
                 item = item_wrapper.get("Item", {})
                 item_code = item.get("itemCode")
+                item_name = item.get("itemName", "")
+                item_caption = item.get("itemCaption", "")
+                full_text = f"{item_name} {item_caption}".lower()
+
+                # NGワードが含まれる場合は除外
+                if any(ng in full_text for ng in ng_words):
+                    print(f"Skipping non-toy item (NG word matched): {item_name}")
+                    continue
+
                 if item_code and item_code not in posted_cache:
                     return item
     except Exception as e:
