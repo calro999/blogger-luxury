@@ -71,6 +71,7 @@ def _search_by_keyword(app_id, access_key, keyword, posted_cache):
         "applicationId": app_id,
         "accessKey": access_key,
         "keyword": keyword,
+        "genreId": "101164", # おもちゃ・ホビー・ゲームジャンル限定
         "format": "json",
         "hits": 30
     }
@@ -79,10 +80,16 @@ def _search_by_keyword(app_id, access_key, keyword, posted_cache):
 
     # スクィーズ（玩具・ホビー）と無関係な商品を除外するためのNGワードリスト
     ng_words = [
+        # 清掃用品・洗剤
         "洗剤", "モアマン", "moerman", "掃除", "清掃", "ワイパー", "窓拭き", 
         "ガラス清掃", "スクイジー", "スクイジーデラックス", "ブラックエッセンス",
         "ディッシュウォッシュ", "柔軟剤", "シャンプー", "コンディショナー", "ボディソープ",
-        "キッチン洗剤", "水切り", "水切りワイパー", "ゴムスクイジー"
+        "キッチン洗剤", "水切り", "水切りワイパー", "ゴムスクイジー",
+        # 食品・調味料・ソース・ボトル・飲料
+        "ソース", "チョコレート", "キャラメル", "ガーリック", "ジンジャー", "スパイス",
+        "ボトル", "シロップ", "ドレッシング", "調味料", "香辛料", "ケチャップ", "マヨネーズ",
+        "オンス", "oz", "bundle", "バンドル", "グラウンド", "お菓子", "スイーツ", "食品",
+        "コーヒー", "ポーション", "ジュース", "飲料", "ジャム", "パスタ", "オリーブオイル"
     ]
 
     try:
@@ -308,19 +315,19 @@ def generate_article_with_llm(item):
             except Exception as e:
                 print(f"GitHub Models API ({model_name}) error: {e}")
 
-    print("WARNING: All online LLM generation attempts failed or rate limited. Generating high-quality tailored fallback HTML.")
+    print("WARNING: All online LLM generation attempts failed or rate limited. Generating high-quality squishy-focused fallback HTML.")
     clean_title = title.replace("【", "").replace("】", "")[:35]
     img_tag = f'<img src="{image_url}" alt="{clean_title}" style="max-width: 100%; height: auto;"><br>' if image_url else ""
     fallback_html = (
         f'<div class="article-wrapper">'
         f'<div class="content-body">'
-        f'<h2>【おすすめ】{clean_title}</h2>'
-        f'<p>大人気＆注目の話題のアイテム「<b>{title}</b>」をご紹介します！</p>'
-        f'<p>デザイン性と実用性を兼ね備えた満足度の高いおすすめ商品です。</p>'
+        f'<h2>【極上触感スクイーズ】{clean_title}</h2>'
+        f'<p>スクイーズファン必見！大人気＆極上の低反発触感を誇る「<b>{title}</b>」をご紹介します！</p>'
+        f'<p>見ているだけで癒やされる高い造形美と、手に取った瞬間のもちもち感が魅力のプレミアムスクイーズです。</p>'
         f'<ul class="points-list">'
-        f'<li><b>おすすめポイント1</b>：細部までこだわり抜かれた高いデザイン性とクオリティ！</li>'
-        f'<li><b>おすすめポイント2</b>：使いやすさと機能性に優れ、日常生活で大活躍！</li>'
-        f'<li><b>おすすめポイント3</b>：自分用にはもちろん、大切な方へのプレゼントにも最適！</li>'
+        f'<li><b>癖になるモチモチ低反発</b>：一度握ったら手放せない心地よい触感！</li>'
+        f'<li><b>リアルで愛らしいデザイン</b>：細部までこだわり抜かれたハイクオリティな完成度！</li>'
+        f'<li><b>ギフト・コレクションに最適</b>：スクイーズ好きへのプレゼントや自分へのご褒美にぴったり！</li>'
         f'</ul>'
         f'{img_tag}'
         f'{buy_button_html}'
@@ -329,7 +336,7 @@ def generate_article_with_llm(item):
         f'</div>'
     )
     return {
-        "title": f"【注目】{clean_title}",
+        "title": f"【極上スクイーズ】{clean_title}",
         "html": fallback_html
     }
 
