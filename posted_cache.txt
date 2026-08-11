@@ -357,3 +357,4 @@ vaps:10189327
 doux-fleurette:10018305
 vaps2shop:10011519
 wasshoi-mura:10023658
+shininostore:10097151
