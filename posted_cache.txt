@@ -350,3 +350,4 @@ otakarasouko:10380921
 gosunwood:10008271
 okashinomarch:10035102
 toytoifactory:10022416
+shininostore:10097043
