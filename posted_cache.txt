@@ -355,3 +355,4 @@ candm-japan:10011137
 39march:10022645
 vaps:10189327
 doux-fleurette:10018305
+vaps2shop:10011519
