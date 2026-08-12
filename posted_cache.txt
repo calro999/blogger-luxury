@@ -361,3 +361,4 @@ shininostore:10097151
 sanyodo-shop:10039877
 c-lanlan:10028679
 vaps:10189965
+basicbag:10000593
