@@ -384,3 +384,4 @@ kishi-gum:10032636
 nextmart:10408326
 festival-plaza:10067245
 festival-plaza:10067552
+vaps2shop:10010265
