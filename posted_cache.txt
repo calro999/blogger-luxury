@@ -377,3 +377,4 @@ zealstore:10000903
 festival-plaza:10067034
 toyconnect:10000889
 hiroland:10001033
+sloth-l:10001466
