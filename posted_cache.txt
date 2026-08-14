@@ -400,3 +400,4 @@ festival-plaza:10067244
 festival-plus:10072375
 kattty:10002635
 kishi-gum:10032692
+hanamarushop:10084254
