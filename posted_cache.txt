@@ -402,3 +402,4 @@ kattty:10002635
 kishi-gum:10032692
 hanamarushop:10084254
 auc-beagle:10302909
+ajyuri:10815792
