@@ -428,3 +428,4 @@ kishi-gum:10032693
 sloth-l:10001464
 festival-plaza:10067671
 festival-plus:10072712
+smilekankyo1:10000148
