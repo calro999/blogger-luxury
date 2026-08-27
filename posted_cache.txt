@@ -431,3 +431,4 @@ festival-plus:10072712
 smilekankyo1:10000148
 saisonlife:10015827
 festival-plaza:10067030
+sanyodo-shop:10044466
