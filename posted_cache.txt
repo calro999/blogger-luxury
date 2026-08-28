@@ -433,3 +433,4 @@ saisonlife:10015827
 festival-plaza:10067030
 sanyodo-shop:10044466
 basicbag:10000512
+basicbag:10000562
