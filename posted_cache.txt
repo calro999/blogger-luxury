@@ -435,3 +435,4 @@ sanyodo-shop:10044466
 basicbag:10000512
 basicbag:10000562
 festival-plus:10072360
+basicbag:10000573
