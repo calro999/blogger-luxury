@@ -452,3 +452,4 @@ festival-plaza:10067931
 festival-plaza:10067929
 festival-plaza:10067932
 festival-plus:10072744
+kkyamasakishop:10004484
