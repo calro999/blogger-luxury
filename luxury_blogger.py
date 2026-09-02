@@ -64,7 +64,7 @@ def sanitize_llm_output(content, valid_affiliate_url):
     sanitized = sanitized.replace("Amazon", "楽天市場").replace("アマゾン", "楽天市場").replace("ヤフー", "楽天市場").replace("Yahoo!", "楽天市場")
     return sanitized
 
-def _search_by_keyword(app_id, access_key, keyword, posted_cache):
+def _search_by_keyword(app_id, access_key, keyword, posted_cache, page=1):
     affiliate_id = os.environ.get("RAKUTEN_AFFILIATE_ID")
     url = "https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260401"
     params = {
@@ -73,6 +73,7 @@ def _search_by_keyword(app_id, access_key, keyword, posted_cache):
         "keyword": keyword,
         "genreId": "101164", # おもちゃ・ホビー・ゲームジャンル限定
         "format": "json",
+        "page": page,
         "hits": 30
     }
     if affiliate_id:
@@ -112,7 +113,7 @@ def _search_by_keyword(app_id, access_key, keyword, posted_cache):
                 if item_code and item_code not in posted_cache:
                     return item
     except Exception as e:
-        print(f"Search keyword '{keyword}' error: {e}")
+        print(f"Search keyword '{keyword}' page {page} error: {e}")
     return None
 
 
@@ -134,15 +135,25 @@ def fetch_rakuten_item():
         "マザーガーデン スクイーズ",
         "スクイーズ プレミアム",
         "スクイーズ 限定",
-        "スクイーズ もちもち"
+        "スクイーズ もちもち",
+        "スクイーズ ドーナツ",
+        "スクイーズ パン",
+        "スクイーズ かわいい",
+        "スクイーズ 食品サンプル",
+        "スクイーズ 癒し おもちゃ",
+        "スクイーズ 音フェチ",
+        "スクイーズ ストレス解消"
     ]
     random.shuffle(squishy_keywords)
 
     for kw in squishy_keywords:
-        print(f"Searching Rakuten for squishy keyword: {kw}")
-        item = _search_by_keyword(app_id, access_key, kw, posted_cache)
-        if item:
-            return item
+        pages = [1, 2, 3]
+        random.shuffle(pages)
+        for page in pages:
+            print(f"Searching Rakuten for squishy keyword: {kw} (page {page})")
+            item = _search_by_keyword(app_id, access_key, kw, posted_cache, page=page)
+            if item:
+                return item
 
     raise RuntimeError("No unposted squishy items found.")
 
