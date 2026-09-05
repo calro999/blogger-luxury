@@ -474,3 +474,4 @@ gosunwood:10004345
 kishi-gum:10032502
 kishi-gum:10032579
 festival-plaza:10063451
+wasshoi-mura:10024865
