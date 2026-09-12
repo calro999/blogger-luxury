@@ -525,3 +525,4 @@ auc-fukumishouji:10027300
 ajmart:10004813
 colorsstore:10530496
 colorsstore:10530461
+digitamin:10340562
