@@ -522,3 +522,4 @@ zakkamarche:10015333
 colorsstore:10530468
 wasshoi-mura:10023136
 auc-fukumishouji:10027300
+ajmart:10004813
