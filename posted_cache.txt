@@ -529,3 +529,4 @@ digitamin:10340562
 festival-plaza:10063434
 auc-beagle:10302927
 thienukei:10020878
+gmarket-japan:10310959
