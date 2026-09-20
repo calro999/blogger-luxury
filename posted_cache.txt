@@ -576,3 +576,4 @@ yamasakionline2:10001608
 wasshoi-mura:10024928
 festival-plus:10072358
 colorsstore:10530478
+kishi-gum:10032580
