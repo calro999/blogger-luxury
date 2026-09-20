@@ -577,3 +577,4 @@ wasshoi-mura:10024928
 festival-plus:10072358
 colorsstore:10530478
 kishi-gum:10032580
+festival-plaza:10067564
