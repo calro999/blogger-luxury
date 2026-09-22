@@ -586,3 +586,4 @@ nextmart:10408333
 gosunwood:10008099
 colorsstore:10524908
 festival-plus:10072713
+basicbag:10000552
