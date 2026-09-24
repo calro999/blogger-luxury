@@ -595,3 +595,4 @@ basicbag:10000590
 festival-plaza:10068057
 biccamera:15703589
 yamamotoningyou:10004136
+festival-plus:10073284
