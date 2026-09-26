@@ -610,3 +610,4 @@ kattty:10002651
 rainbowlink:10000222
 sloth-l:10001673
 festival-plus:10072704
+wasshoi-mura:10023793
