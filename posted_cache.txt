@@ -622,3 +622,4 @@ kantolifeshop:10002549
 gosunwood:10007566
 ssagent:10003457
 expsjapan:10032171
+gosunwood:10008536
