@@ -656,3 +656,4 @@ festival-plus:10073471
 fashionhime:10037250
 eirigoods:10003158
 colorsstore:10530439
+morganshop:10018319
