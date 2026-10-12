@@ -694,3 +694,4 @@ eirigoods:10003152
 festival-plus:10058736
 festival-plaza:10068231
 festival-plaza:10068339
+auc-yuyou:10189581
