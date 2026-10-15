@@ -716,3 +716,4 @@ goodlifepartner:10068933
 festival-plaza:10063449
 8made:10000072
 eminencestore:10008452
+glittershop2024:10028822
