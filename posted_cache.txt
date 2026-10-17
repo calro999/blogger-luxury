@@ -728,3 +728,4 @@ auc-hanabiya-gekiyasu:10007181
 festival-plaza:10068236
 festival-plaza:10067035
 festival-plaza:10068332
+wasshoi-mura:10023481
