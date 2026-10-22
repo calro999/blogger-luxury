@@ -761,3 +761,4 @@ emuland-store:10875763
 otakarasouko:10402938
 saisonlife:10030634
 festival-plaza:10051236
+mstrend:10004681
