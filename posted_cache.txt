@@ -798,3 +798,4 @@ mabashistore:10450862
 eirigoods:10003248
 zakkamarche:10016425
 azon-shop00:10006570
+ajmart:10004814
