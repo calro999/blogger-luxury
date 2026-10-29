@@ -809,3 +809,4 @@ sloth-l:10001539
 festival-plaza:10068436
 festival-plus:10073463
 festival-plaza:10068069
+otakarasouko:10404997
