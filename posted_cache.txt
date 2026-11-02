@@ -834,3 +834,4 @@ festival-plus:10072357
 festival-plaza:10068412
 festival-plaza:10068348
 nextmart:10408335
+otakarasouko:10402273
