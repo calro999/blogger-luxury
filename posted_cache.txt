@@ -850,3 +850,4 @@ otakarasouko:10402496
 epln:10011600
 otakarasouko:10406748
 festival-plus:10072359
+astershop:10796334
