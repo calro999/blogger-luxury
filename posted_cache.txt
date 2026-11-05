@@ -853,3 +853,4 @@ festival-plus:10072359
 astershop:10796334
 festival-plaza:10068230
 ciel-sora:10208721
+otakarasouko:10402123
