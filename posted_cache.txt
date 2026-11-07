@@ -865,3 +865,4 @@ kishi-gum:10032790
 t-crown:10002560
 otakarasouko:10407759
 festival-plaza:10068419
+ksmart00:10089009
