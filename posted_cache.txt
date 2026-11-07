@@ -870,3 +870,4 @@ ksmart00:10090668
 otakarasouko:10407750
 mabashistore:10447208
 mabashistore:10450876
+otakarasouko:10408193
