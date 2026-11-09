@@ -461,3 +461,4 @@ festival-plaza:10038315
 yamamotoningyou:10003797
 otakarasouko:10404996
 nextmart:10408347
+basicbag:10000574
