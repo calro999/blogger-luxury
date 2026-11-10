@@ -472,3 +472,4 @@ basicbag:10000496
 festival-plaza:10067564
 thienukei:10020878
 wasshoi-mura:10025121
+ciel-sora:10208721
