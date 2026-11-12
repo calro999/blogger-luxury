@@ -497,3 +497,4 @@ f423238-hasami:10002465
 rapites:10024478
 tigercat:10045985
 wakin:10005734
+freepersonshop:10007931
