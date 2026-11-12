@@ -493,3 +493,4 @@ gosunwood:10008200
 nishi-ryutu-2:10002169
 wasshoi-mura:10024778
 festival-plaza:10068074
+f423238-hasami:10002465
