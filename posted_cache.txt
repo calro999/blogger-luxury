@@ -500,3 +500,4 @@ wakin:10005734
 freepersonshop:10007931
 precious-place:10008297
 f423238-hasami:10002466
+shimataro:10000523
