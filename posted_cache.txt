@@ -516,3 +516,4 @@ tigercat:10042549
 festival-plaza:10068224
 precious-place:10008408
 14promo:10028118
+basicbag:10000606
