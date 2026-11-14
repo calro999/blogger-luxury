@@ -517,3 +517,4 @@ festival-plaza:10068224
 precious-place:10008408
 14promo:10028118
 basicbag:10000606
+f423238-hasami:10000633
