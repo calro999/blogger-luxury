@@ -519,3 +519,4 @@ precious-place:10008408
 basicbag:10000606
 f423238-hasami:10000633
 wasshoi-mura:10024596
+kaguranger:10001005
