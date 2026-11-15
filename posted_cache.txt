@@ -522,3 +522,4 @@ wasshoi-mura:10024596
 kaguranger:10001005
 drinkland:10000207
 tigercat:10043508
+wakin:10005733
