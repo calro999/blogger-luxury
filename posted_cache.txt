@@ -566,3 +566,4 @@ sloth-l:10001619
 precious-place:10008217
 gosunwood:10008374
 onlineorder:10000376
+wasshoi-mura:10025051
