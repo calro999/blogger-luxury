@@ -601,3 +601,4 @@ botomulineshop01:10004162
 warehouse1o1:10000065
 rockonline:10015861
 f423238-hasami:10000635
+yoshimori:10003525
