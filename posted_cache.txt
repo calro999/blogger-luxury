@@ -610,3 +610,4 @@ lunawonderland:10000002
 gosunwood:10008349
 horiku:10269058
 tigercat:10046328
+mizo-katsukyou-1988:10000004
