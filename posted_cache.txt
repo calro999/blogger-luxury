@@ -604,3 +604,4 @@ f423238-hasami:10000635
 yoshimori:10003525
 dolemi-shop:10002481
 rainbowbridge:10001778
+fampa:10001107
