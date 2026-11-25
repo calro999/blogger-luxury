@@ -622,3 +622,4 @@ kishi-gum:10032788
 brico:10050321
 precious-place:10006532
 kishi-gum:10032790
+festival-plaza:10068231
