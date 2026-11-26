@@ -632,3 +632,4 @@ dokidokishopzoomin:10003745
 h2o-e:10000433
 gosunwood:10008379
 tigercat:10045536
+kantolifeshop:10002567
